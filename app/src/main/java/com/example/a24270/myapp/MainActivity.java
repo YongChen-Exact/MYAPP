@@ -232,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                    ViewPageAdapter pagerAdapter = new ViewPageAdapter(homelist,imageViewList,MainActivity.this);
 //                    viewPager.setAdapter(pagerAdapter);
-
 //                    RecyclerView recyclerView1=(RecyclerView) findViewById(R.id.recycler_item1);
 //                    LinearLayoutManager layoutManager1 = new LinearLayoutManager(MainActivity.this);
 //                    layoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
