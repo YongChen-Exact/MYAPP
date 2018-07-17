@@ -7,22 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="195dp">
 
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:background="#88000000" />-->
-        <!--<TextView-->
-            <!--android:id="@+id/zd_name"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:layout_marginLeft="18dp"-->
-            <!--android:textColor="#00C78C"-->
-            <!--android:textSize="20sp"-->
-            <!--/>-->
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
