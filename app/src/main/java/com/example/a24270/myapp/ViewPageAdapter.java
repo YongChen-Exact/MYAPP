@@ -21,20 +21,13 @@ import java.util.logging.Handler;
 public class ViewPageAdapter extends PagerAdapter{
     private List<App> homelist;
     private List<ImageView>imageViewList;
-    //private List<TextView>textViewList;
     private Context context;
-    private TextView textView;
-
-
-
 
     public ViewPageAdapter(List<App>homelist,List<ImageView>imageViewList,Context context){
-        //this.textViewList = textViewList;
         this.imageViewList = imageViewList;
         this.context = context;
         this.homelist = homelist;
     }
-
 
         @Override
     public Object instantiateItem(ViewGroup container, final int positon) {

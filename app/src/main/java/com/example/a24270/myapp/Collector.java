@@ -19,11 +19,11 @@ import java.util.List;
 public class Collector extends AppCompatActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-     CollectorDataHelper helper;
+    CollectorDataHelper helper;
     private List<Title_Collector> titlelist = new ArrayList<>();
     private RecyclerView recyclerView;
     CollectorAdapter collectorAdapter;
-    private int J = 1;
+    private int J = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +54,17 @@ public class Collector extends AppCompatActivity {
     private void Loader(){
         helper=new CollectorDataHelper(getApplicationContext(),"Book",null,2);
         SQLiteDatabase db = helper.getWritableDatabase();
-        Cursor cursor = db.query("Book",null,null,null,null,null,null);
-        cursor.moveToFirst();
+        Cursor cursor = db.query("Book",null,null,null,
+                null,null,null);//一行数据，逐行查找
+        cursor.moveToFirst();//光标移动到头部
         long count = cursor.getCount();
         if(count == 0){
             Toast.makeText(getApplicationContext(), "没有哒！", Toast.LENGTH_SHORT).show();
         }
+        if(J>0){
+            titlelist.clear();
+        }J++;
         if (cursor.moveToFirst()){
-            if(J  > 0) {
-                titlelist.clear();
-            }J++;
             do {
                 String author = cursor.getString(cursor.getColumnIndex("author"));
                 String link = cursor.getString(cursor.getColumnIndex("link"));
@@ -72,7 +73,6 @@ public class Collector extends AppCompatActivity {
                 Title_Collector m = new Title_Collector(author,link,title,id);
                 titlelist.add(m);
             }while (cursor.moveToNext());
-
         }
     }
     private void setRecycleView(){

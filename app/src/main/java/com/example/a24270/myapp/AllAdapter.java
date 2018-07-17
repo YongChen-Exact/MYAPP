@@ -28,16 +28,10 @@ public class AllAdapter extends RecyclerView.Adapter{
     private Context context;
     private int jug;
 
-    public AllAdapter(List<ImageView> imageViewList, List<App> homelist, Context context,List<Title> titleList ){
-       // Log.d("666", "AllAdapter: "+homelist);
+    public AllAdapter(List<ImageView> imageViewList, List<App> homelist, Context context ){
         this.homelist.addAll(homelist);
         this.imageViewList.addAll(imageViewList);
         this.context = context;
-        this.titleList.addAll(titleList);
-        initData(titleList);
-    }
-    public void setTitleList(List<Title>TitleList){
-        titleList.addAll(TitleList);
     }
 
     class ViewPagerHolder extends RecyclerView.ViewHolder{
@@ -73,13 +67,11 @@ public class AllAdapter extends RecyclerView.Adapter{
         RecyclerView.ViewHolder holder = null;
         switch (viewType){
             case 0:
-                view = LayoutInflater.from(context).inflate(R.layout.banner
-                        ,parent,false);
+                view = LayoutInflater.from(context).inflate(R.layout.banner,parent,false);
                 holder = new ViewPagerHolder(view);
                 break;
             default:
-                view = LayoutInflater.from(context).inflate(R.layout.title
-                        ,parent,false);
+                view = LayoutInflater.from(context).inflate(R.layout.title,parent,false);
                 holder = new TitleViewHolder(view);
                 ((TitleViewHolder)holder).titleView.setOnClickListener(new View.OnClickListener() {
                     @Override

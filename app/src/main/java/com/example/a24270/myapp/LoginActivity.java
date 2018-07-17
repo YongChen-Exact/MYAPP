@@ -17,19 +17,14 @@ import android.widget.Toast;
 public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences pref;
-
     private SharedPreferences.Editor editor;
 
     private EditText accountEdit;
-
     private EditText passwordEdit;
 
     private Button login;
-
     private Button sign;
-
     private Button skip;
-
     private CheckBox rememberPass;
 
     @Override
@@ -59,8 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordEdit.getText().toString();
                 SharedPreferences Pref = getSharedPreferences("user",MODE_PRIVATE);
                 String name = Pref.getString("name","");
-                String key = Pref.getString("key","");//取出数据
-
+                String key = Pref.getString("key","");
                 //判断账号和密码不为空，且需和数据库中的账号密码匹配
                 if (account.length() == 0||password.length() == 0){
                         Toast.makeText(LoginActivity.this, "请输入账号或密码!",

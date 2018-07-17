@@ -47,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int UPDATE_TEXT1 = 1;
     private static final int UPDATE_TEXT2 = 2;
-    private static final int UPDATE_TEXT3 = 3;
     private static  int page = 0;
-    private static final String TAG = "MainActivity";
 
     private AllAdapter allAdapter;
     private RecyclerView recyclerView;
@@ -57,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<App> homelist = new ArrayList<>();
     private List<Title> titlelist = new ArrayList<>();
+    private List<ImageView> imageViewList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,18 +72,19 @@ public class MainActivity extends AppCompatActivity {
         sendRequestWithOkHttp2();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.chc);
         }
+        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
         navView.setCheckedItem(R.id.collector);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Intent intent = new Intent(MainActivity.this,Collector.class);
                 startActivity(intent);
+                mDrawerLayout.closeDrawers();
                 return true;
             }
         });
@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     private void sendRequestWithOkHttp1() {
         new Thread(new Runnable() {
             @Override
@@ -138,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-
     private void parseJSONWithJSONObject1(String jsonData) {
         try {
             JSONObject object = new JSONObject(jsonData);
@@ -154,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
             Message message = new Message();
             message.what = UPDATE_TEXT1;
             handler.sendMessage(message);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -199,12 +196,9 @@ public class MainActivity extends AppCompatActivity {
                 Title m = new Title(author,chapterName,niceDate,title,link,id);
                 mlist.add(m);
             }
-
             Message message = new Message();
             message.what = UPDATE_TEXT2;
             message.arg1 = page;
-            /**这个mlist拿到handler 里面是因为不能在子线程添加数据。之前在解析后直接add到titlelist里面的写法是错误的！要保证同步必须拿到主线程赋值并且添加数据
-             * 下面的pages 也是同理*/
             message.obj = mlist;
             handler.sendMessage(message);
         } catch (JSONException e) {
@@ -212,8 +206,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private List<ImageView> imageViewList = new ArrayList<>();
-    private List<TextView> textViewList = new ArrayList<>();
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         public void handleMessage(Message msg) {
@@ -223,30 +215,13 @@ public class MainActivity extends AppCompatActivity {
                         ImageView imageView = new ImageView(MainActivity.this);
                         imageViewList.add(imageView);
                     }
-                        allAdapter = new AllAdapter(imageViewList, homelist, MainActivity.this, titlelist);
+                        allAdapter = new AllAdapter(imageViewList, homelist, MainActivity.this);
                         recyclerView.setAdapter(allAdapter);
-//                    ViewPager viewPager = findViewById(R.id.viewpager);
-//                    for (int i = 0; i < homelist.size(); i++) {
-//                        ImageView imageView = new ImageView(MainActivity.this);
-//                        imageViewList.add(imageView);
-//                    }
-//                    ViewPageAdapter pagerAdapter = new ViewPageAdapter(homelist,imageViewList,MainActivity.this);
-//                    viewPager.setAdapter(pagerAdapter);
-//                    RecyclerView recyclerView1=(RecyclerView) findViewById(R.id.recycler_item1);
-//                    LinearLayoutManager layoutManager1 = new LinearLayoutManager(MainActivity.this);
-//                    layoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
-//                    recyclerView1.setLayoutManager(layoutManager1);//将实例存于recyclerview中;
-//                    HomeAdapter adapter1= new HomeAdapter(homelist,MainActivity.this);
-//                    recyclerView1.setAdapter(adapter1);
                         break;
                         case UPDATE_TEXT2:
-                            int pages = (int)msg.arg1;
+                            int pages = msg.arg1;
                             titlelist = (List<Title>)msg.obj;
-                            /**TitleAdapter要new，之前会崩的原因是没有new */
-                            allAdapter.setTitleList(titlelist);
                             loadMore(pages);
-                            break;
-                        case UPDATE_TEXT3:
                             break;
                         default:
                             break;
@@ -260,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
             LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
             if (newState == RecyclerView.SCROLL_STATE_IDLE){
                 int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
-                Log.e(TAG, "onScrollStateChanged: "+lastVisiblePosition);
                 if (lastVisiblePosition+1 == recyclerView.getAdapter().getItemCount()){
                     sendRequestWithOkHttp2();
                 }
@@ -269,10 +243,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void loadMore(int pages) {
-        if (pages < 5) {
-            allAdapter.initData(titlelist);
-            allAdapter.notifyDataSetChanged();
-            titlelist.clear();
+                if (pages < 5) {
+                    allAdapter.initData(titlelist);
+                    allAdapter.notifyDataSetChanged();
+                    titlelist.clear();
         } else {
             Toast.makeText(getApplicationContext(), "没有哒！", Toast.LENGTH_SHORT).show();
         }
