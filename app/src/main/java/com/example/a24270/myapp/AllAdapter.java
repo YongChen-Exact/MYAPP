@@ -35,10 +35,13 @@ public class AllAdapter extends RecyclerView.Adapter{
     }
 
     class ViewPagerHolder extends RecyclerView.ViewHolder{
-        private ViewPager viewPager;
+        View homeView;
+        ViewPager viewPager;
+        TextView homeText;
 
         public ViewPagerHolder(View itemView) {
             super(itemView);
+            homeView = itemView;
             viewPager = itemView.findViewById(R.id.viewpager);
         }
     }
@@ -68,6 +71,7 @@ public class AllAdapter extends RecyclerView.Adapter{
         switch (viewType){
             case 0:
                 view = LayoutInflater.from(context).inflate(R.layout.banner,parent,false);
+
                 holder = new ViewPagerHolder(view);
                 break;
             default:
