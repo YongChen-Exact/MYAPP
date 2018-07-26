@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
         View view = navView.inflateHeaderView(R.layout.nav_header);
         TextView textView = view.findViewById(R.id.changeUser);
         textView.setOnClickListener(clickListener);
